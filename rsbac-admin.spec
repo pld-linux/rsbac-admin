@@ -2,8 +2,8 @@
 # TODO:
 # - subpackages, %files
 #
-%define		rcrel	rc3
-%define		rcver	-%{rcrel}
+%define		rcrel	%{nil}
+%define		rcver	%{nil}
 Summary:	A set of RSBAC utilities
 Summary(pl.UTF-8):	Zbiór narzędzi RSBAC
 Name:		rsbac-admin
@@ -11,8 +11,9 @@ Version:	1.4.0
 Release:	0.%{rcrel}.1
 License:	GPL v2
 Group:		Applications
-Source0:	ftp://rsbac.org/download/pre/rsbac-1.4.0-rc3/%{name}-%{version}%{rcver}.tar.bz2
-# Source0-md5:	5c9d5d8602995baf1cd12dc85f698c07
+#Source0:	ftp://rsbac.org/download/pre/rsbac-1.4.0-rc3/%{name}-%{version}%{rcver}.tar.bz2
+Source0:	ftp://rsbac.org/download/code/1.4.0/%{name}-%{version}.tar.bz2
+# Source0-md5:	b72df9263fa67e90e155c3c9d3948c05
 URL:		http://www.rsbac.org/
 BuildRequires:	gettext-devel
 BuildRequires:	libtool
@@ -74,18 +75,30 @@ Pliki nagłówkowe biblioteki ....
 %setup -q -n %{name}-%{version}%{rcver}
 
 %build
-%{__make} build \
+%{__make} libs pam nss \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -shared -fPIC -I../headers -I/usr/include/ncurses\
 		-include ../libs/asm-arches/asm-x86_64/unistd.h" \
 	LDFLAGS="%{rpmldflags}" \
 	PREFIX="%{_prefix}" \
-	VERBOSE=1 \
 	LIBTOOL="libtool --tag=CC" \
 	DIR_LIBS=%{_libdir} \
 	DIR_NSS=%{_libdir} \
 	SYSCONFDIR=%{_sysconfdir}
+	#VERBOSE=1 \
 
+%{__make} rklogd tools \
+	CC="%{__cc}" \
+	CFLAGS="%{rpmcflags} -fPIC -I../headers -I/usr/include/ncurses\
+		-Isrc -include ../libs/asm-arches/asm-x86_64/unistd.h" \
+	PREFIX="%{_prefix}" \
+	LIBTOOL="libtool --tag=CC" \
+	DIR_LIBS=%{_libdir} \
+	DIR_NSS=%{_libdir} \
+	SYSCONFDIR=%{_sysconfdir}
+	#VERBOSE=1 \
+
+	#LDFLAGS="%{rpmldflags} -L../libs/.libs" \
 
 %install
 rm -rf $RPM_BUILD_ROOT
