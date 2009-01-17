@@ -8,12 +8,13 @@ Summary:	A set of RSBAC utilities
 Summary(pl.UTF-8):	Zbiór narzędzi RSBAC
 Name:		rsbac-admin
 Version:	1.4.0
-Release:	0.%{rcrel}.1
+Release:	0.2
 License:	GPL v2
 Group:		Applications
 #Source0:	ftp://rsbac.org/download/pre/rsbac-1.4.0-rc3/%{name}-%{version}%{rcver}.tar.bz2
 Source0:	ftp://rsbac.org/download/code/1.4.0/%{name}-%{version}.tar.bz2
 # Source0-md5:	b72df9263fa67e90e155c3c9d3948c05
+Patch0:		%{name}-make.patch
 URL:		http://www.rsbac.org/
 BuildRequires:	gettext-devel
 BuildRequires:	libtool
@@ -73,32 +74,22 @@ Pliki nagłówkowe biblioteki ....
 
 %prep
 %setup -q -n %{name}-%{version}%{rcver}
+%patch0 -p1
 
 %build
-%{__make} libs pam nss \
+%{__make} libs pam nss rklogd tools \
 	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags} -shared -fPIC -I../headers -I/usr/include/ncurses\
-		-include ../libs/asm-arches/asm-x86_64/unistd.h" \
+	OPT="%{rpmcflags} -fPIC -I/usr/include/ncurses" \
 	LDFLAGS="%{rpmldflags}" \
 	PREFIX="%{_prefix}" \
 	LIBTOOL="libtool --tag=CC" \
 	DIR_LIBS=%{_libdir} \
 	DIR_NSS=%{_libdir} \
-	SYSCONFDIR=%{_sysconfdir}
-	#VERBOSE=1 \
-
-%{__make} rklogd tools \
-	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags} -fPIC -I../headers -I/usr/include/ncurses\
-		-Isrc -include ../libs/asm-arches/asm-x86_64/unistd.h" \
-	PREFIX="%{_prefix}" \
-	LIBTOOL="libtool --tag=CC" \
-	DIR_LIBS=%{_libdir} \
-	DIR_NSS=%{_libdir} \
-	SYSCONFDIR=%{_sysconfdir}
-	#VERBOSE=1 \
+	SYSCONFDIR=%{_sysconfdir} \
+	VERBOSE=1
 
 	#LDFLAGS="%{rpmldflags} -L../libs/.libs" \
+	#LDFLAGS="%{rpmldflags}" \
 
 %install
 rm -rf $RPM_BUILD_ROOT
