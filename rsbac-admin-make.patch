@@ -1,0 +1,106 @@
+diff -ur rsbac-admin-1.4.0./main/libs/Makefile rsbac-admin-1.4.0/main/libs/Makefile
+--- rsbac-admin-1.4.0./main/libs/Makefile	2009-01-08 13:31:27.000000000 +0100
++++ rsbac-admin-1.4.0/main/libs/Makefile	2009-01-17 13:23:38.637475933 +0100
+@@ -35,8 +35,8 @@
+ 
+ NLS		:= 1
+ 
+-CFLAGS		:= -fPIC -O2 -fomit-frame-pointer
+-CFLAGS		+= -I../headers -I/usr/include -I/usr/local/include  \
++OPT		:= -fPIC -O2 -fomit-frame-pointer
++CFLAGS		+= $(OPT) -I../headers -I/usr/include -I/usr/local/include  \
+ 		   -I$(PREFIX)/include
+ LDFLAGS		:=
+ DEFINES		:= -DPACKAGE=\"rsbac-admin\" \
+diff -ur rsbac-admin-1.4.0./main/nss/Makefile rsbac-admin-1.4.0/main/nss/Makefile
+--- rsbac-admin-1.4.0./main/nss/Makefile	2009-01-08 13:31:24.000000000 +0100
++++ rsbac-admin-1.4.0/main/nss/Makefile	2009-01-17 13:23:38.637475933 +0100
+@@ -26,8 +26,8 @@
+ LIBDIR		:= $(DIR_NSS)
+ endif
+ 
+-CFLAGS		:= -O2 -fomit-frame-pointer
+-CFLAGS		+= -I../headers -I/usr/include -I/usr/local/include \
++OPT		:= -O2 -fomit-frame-pointer
++CFLAGS		+= $(OPT) -I../headers -I/usr/include -I/usr/local/include \
+ 		   -I$(PREFIX)/include
+ LDFLAGS		:=
+ 
+diff -ur rsbac-admin-1.4.0./main/pam/Makefile rsbac-admin-1.4.0/main/pam/Makefile
+--- rsbac-admin-1.4.0./main/pam/Makefile	2009-01-08 13:31:27.000000000 +0100
++++ rsbac-admin-1.4.0/main/pam/Makefile	2009-01-17 13:23:38.637475933 +0100
+@@ -32,8 +32,8 @@
+ NLS		:= 1
+ RSBAC_PROMPT	:= 0
+ 
+-CFLAGS		:= -fPIC -O2 -fomit-frame-pointer
+-CFLAGS		+= -shared -I../headers -I/usr/include -I/usr/local/include \
++OPT		:= -fPIC -O2 -fomit-frame-pointer
++CFLAGS		+= $(OPT) -shared -I../headers -I/usr/include -I/usr/local/include \
+ 		   -I$(PREFIX)/include
+ LDFLAGS		:=
+ 
+@@ -68,7 +68,7 @@
+ all: $(FILES_PAM:.c=.so) $(FILES_PO:.po=.mo)
+ $(FILES_PAM:.c=.so): $(FILES_PAM)
+ 	$(foreach f, $(FILES_PAM), $(ECHO) -e "  LIB\t\t$(f)"; \
+-	$(CC) $(LDFLAGS) $(CFLAGS) $(DEFINES) $(LIBS) -o $(f:.c=.so) $(f);)
++	$(CC) $(LDFLAGS) $(CFLAGS) $(DEFINES) -o $(f:.c=.so) $(f) $(LIBS);)
+ 
+ $(FILES_PO:.po=.mo): $(FILES_PO)
+ ifeq ($(NLS), 1)
+diff -ur rsbac-admin-1.4.0./main/rklogd/Makefile rsbac-admin-1.4.0/main/rklogd/Makefile
+--- rsbac-admin-1.4.0./main/rklogd/Makefile	2009-01-08 13:31:24.000000000 +0100
++++ rsbac-admin-1.4.0/main/rklogd/Makefile	2009-01-17 13:23:38.640810499 +0100
+@@ -24,8 +24,8 @@
+ DIR_SBIN	:= $(PREFIX)/sbin
+ DIR_MAN		:= $(PREFIX)/share/man/man8
+ 
+-CFLAGS		:= -fPIC -O2 -fomit-frame-pointer
+-CFLAGS		+= -Isrc -I. -I../headers -I/usr/include -I/usr/local/include \
++OPT		:= -fPIC -O2 -fomit-frame-pointer
++CFLAGS		+= $(OPT) -Isrc -I. -I../headers -I/usr/include -I/usr/local/include \
+ 		   -I$(PREFIX)/include
+ LDFLAGS		:=
+ 
+@@ -57,7 +57,7 @@
+ 
+ rklogd: $(FILES_RKLOGD:.c=.o)
+ 	$(E) "CC\t\t$@"
+-	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFINES) $(LIBS)  $(FILES_RKLOGD:.c=.o) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFINES) $(FILES_RKLOGD:.c=.o) -o $@ $(LIBS)
+ 
+ $(FILES_RKLOGD:.c=): $(FILES_RKLOGD)
+ 	$(E) "CC\t\t$@"
+@@ -65,7 +65,7 @@
+ 
+ rklogd-viewer: $(FILES_RKLOGDV:.c=.o)
+ 	$(E) "CC\t\t$@"
+-	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFINES) $(LIBS) -lncurses  $(FILES_RKLOGDV:.c=.o) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFINES) $(FILES_RKLOGDV:.c=.o) -o $@ $(LIBS) -lncurses
+ 
+ $(FILES_RKLOGDV:.c=): $(FILES_RKLOGDV)
+ 	$(E) "CC\t\t$@"
+diff -ur rsbac-admin-1.4.0./main/tools/Makefile rsbac-admin-1.4.0/main/tools/Makefile
+--- rsbac-admin-1.4.0./main/tools/Makefile	2009-01-08 13:31:23.000000000 +0100
++++ rsbac-admin-1.4.0/main/tools/Makefile	2009-01-17 13:24:08.016639559 +0100
+@@ -31,8 +31,8 @@
+ 
+ NLS		:= 1
+ 
+-CFLAGS		:= -fPIC -O2 -fomit-frame-pointer
+-CFLAGS		+= -Isrc -I../headers -I/usr/include -I/usr/local/include \
++OPT		:= -fPIC -O2 -fomit-frame-pointer
++CFLAGS		+= $(OPT) -Isrc -I../headers -I/usr/include -I/usr/local/include \
+ 		   -I$(PREFIX)/include
+ LDFLAGS		:=
+ DEFINES		:= -DPACKAGE=\"$(PACKAGE)\" \
+@@ -68,7 +68,7 @@
+ 
+ $(FILES_TOOLS:.c=): % : %.c
+ 	$(E) "CC\t\t$@"
+-	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFINES) $(LIBS) $@.c -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFINES) $@.c -o $@ $(LIBS)
+ 
+ $(FILES_PO:.po=.mo): $(FILES_PO)
+ ifeq ($(NLS), 1)
