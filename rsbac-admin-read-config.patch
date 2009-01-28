@@ -1,0 +1,126 @@
+diff -upr rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_acl_group_menu rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_acl_group_menu
+--- rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_acl_group_menu	2009-01-08 13:31:22.000000000 +0100
++++ rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_acl_group_menu	2009-01-28 15:22:34.895451096 +0100
+@@ -15,17 +15,32 @@ set -h +o posix
+ # The dir for tmp files
+ if test -z "$TMPDIR" ; then TMPDIR=/tmp ; fi
+ 
++# Set conf filename
++RSBACCONF=/etc/rsbac.conf
++# Read settings
++if test -f "$RSBACCONF"
++then . $RSBACCONF
++fi
++if test -f ~/.rsbacrc
++then . ~/.rsbacrc
++fi
++if test -z "$RSBACMOD"
++then RSBACMOD='GEN MAC PM DAZ FF RC AUTH ACL CAP JAIL RES PAX'
++fi
++for i in $RSBACMOD
++do
++  export SHOW_${i}=yes
++done
++
+ # This must be a unique temporary filename
+-TMPFILE=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
+-if test -z $TMPFILE
++if ! TMPFILE=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
+ then
+-  TMPFILE=$TMPDIR/rsbac_dialog.$$
++  TMPFILE=$TMPDIR/rsbac_dialog_tmp.$$
+   if test -e $TMPFILE
+   then rm $TMPFILE
+   fi
+ fi
+-TMPFILETWO=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
+-if test -z $TMPFILETWO
++if ! TMPFILETWO=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
+ then
+   TMPFILETWO=$TMPDIR/rsbac_dialog.$$.2
+   if test -e $TMPFILETWO
+diff -upr rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_acl_menu rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_acl_menu
+--- rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_acl_menu	2009-01-08 13:31:22.000000000 +0100
++++ rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_acl_menu	2009-01-28 15:22:36.032117592 +0100
+@@ -12,6 +12,42 @@
+ #
+ set -h +o posix
+ 
++# The dir for tmp files
++if test -z "$TMPDIR" ; then TMPDIR=/tmp ; fi
++
++# Set conf filename
++RSBACCONF=/etc/rsbac.conf
++# Read settings
++if test -f "$RSBACCONF"
++then . $RSBACCONF
++fi
++if test -f ~/.rsbacrc
++then . ~/.rsbacrc
++fi
++if test -z "$RSBACMOD"
++then RSBACMOD='GEN MAC PM DAZ FF RC AUTH ACL CAP JAIL RES PAX'
++fi
++for i in $RSBACMOD
++do
++  export SHOW_${i}=yes
++done
++
++# This must be a unique temporary filename
++if ! TMPFILE=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
++then
++  TMPFILE=$TMPDIR/rsbac_dialog_tmp.$$
++  if test -e $TMPFILE
++  then rm $TMPFILE
++  fi
++fi
++if ! TMPFILETWO=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
++then
++  TMPFILETWO=$TMPDIR/rsbac_dialog.$$.2
++  if test -e $TMPFILETWO
++  then rm $TMPFILETWO
++  fi
++fi
++
+ # set this to rsbac bin dir, if not in path (trailing / is mandatory!)
+ #
+ #if test -z "$RSBACPATH" ; then RSBACPATH=./ ; fi
+@@ -36,25 +72,6 @@ then
+   exit
+ fi
+ 
+-# The dir for tmp files
+-if test -z "$TMPDIR" ; then TMPDIR=/tmp ; fi
+-
+-# This must be a unique temporary filename
+-if ! TMPFILE=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
+-then
+-  TMPFILE=$TMPDIR/rsbac_dialog.$$
+-  if test -e $TMPFILE
+-  then rm $TMPFILE
+-  fi
+-fi
+-if ! TMPFILETWO=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
+-then
+-  TMPFILETWO=$TMPDIR/rsbac_dialog.$$.2
+-  if test -e $TMPFILETWO
+-  then rm $TMPFILETWO
+-  fi
+-fi
+-
+ set_geometry ()
+ {
+         BL=${1:-24}
+diff -upr rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_menu rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_menu
+--- rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_menu	2009-01-08 13:31:22.000000000 +0100
++++ rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_menu	2009-01-28 15:19:28.095474598 +0100
+@@ -17,9 +17,6 @@ set -h +o posix
+ # The dir for tmp files
+ if test -z "$TMPDIR" ; then TMPDIR=/tmp ; fi
+ 
+-# The dir for tmp files
+-if test -z "$TMPDIR" ; then TMPDIR=/tmp ; fi
+-
+ # This must be a unique temporary filename
+ if ! TMPFILE=`mktemp -q $TMPDIR/rsbac_dialog.XXXXXX`
+ then
