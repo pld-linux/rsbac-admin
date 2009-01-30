@@ -16,6 +16,7 @@ Source0:	ftp://rsbac.org/download/code/1.4.0/%{name}-%{version}.tar.bz2
 # Source0-md5:	b72df9263fa67e90e155c3c9d3948c05
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-read-config.patch
+Patch2:		%{name}-fixes.patch
 URL:		http://www.rsbac.org/
 BuildRequires:	gettext-devel
 BuildRequires:	libtool
@@ -77,6 +78,7 @@ Pliki nagłówkowe biblioteki ....
 %setup -q -n %{name}-%{version}%{rcver}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__make} libs pam nss rklogd tools \

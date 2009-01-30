@@ -1,0 +1,54 @@
+===
+=== rsbac_um_check_account_name() returns error not set errno
+===
+--- rsbac-admin-1.4.0/main/pam/pam_rsbac.c~	2009-01-30 01:29:18.614362491 +0100
++++ rsbac-admin-1.4.0/main/pam/pam_rsbac.c	2009-01-30 01:29:58.965779985 +0100
+@@ -378,7 +378,7 @@ int pam_sm_acct_mgmt(pam_handle_t *pamh,
+   retval = rsbac_um_check_account_name((char *) user);
+   if(!retval)
+     return PAM_SUCCESS;
+-  switch(errno)
++  switch(-retval)
+     {
+       case RSBAC_ENOTFOUND:
+         _log_err(LOG_NOTICE, pamh,
+===
+=== fixed $2 argument for SCD|IPC|USER|PROCESS|GROUP
+=== pass userid from rsbac_user_menu to rsbac_acl_menu
+===
+diff -upr rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_acl_menu rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_acl_menu
+--- rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_acl_menu	2009-01-30 00:23:36.552257077 +0100
++++ rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_acl_menu	2009-01-30 09:28:45.540192090 +0100
+@@ -1545,19 +1545,13 @@ case $1 in
+       DEVSPEC=":DEFAULT:"
+     fi
+     ;;
+-  SCD)
+-    TARGET=$1
+-    TYPE=$1
+-    OBJECT=":DEFAULT:"
+-    ;;
+-  IPC|USER|PROCESS|GROUP)
++  SCD|IPC|USER|PROCESS|GROUP)
+     TARGET=$1
+     TYPE=$1
+     if test -n "$2"
+     then OBJECT="$2"
+     else OBJECT=":DEFAULT:"
+     fi
+-    OBJECT=":DEFAULT:"
+     ;;
+   NETDEV|NETTEMP_NT|NETOBJ)
+     TARGET=$1
+diff -upr rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_user_menu rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_user_menu
+--- rsbac-admin-1.4.0./main/tools/src/scripts/rsbac_user_menu	2009-01-08 13:31:22.000000000 +0100
++++ rsbac-admin-1.4.0/main/tools/src/scripts/rsbac_user_menu	2009-01-30 09:31:42.601468338 +0100
+@@ -1726,7 +1726,7 @@ while true
+       ;;
+ 
+     'ACL Menu:')
+-        $RSBACPATH""rsbac_acl_menu USER
++        $RSBACPATH""rsbac_acl_menu USER $USERID
+       ;;
+ 
+     'Reset Attributes:')
