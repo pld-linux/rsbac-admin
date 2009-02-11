@@ -7,16 +7,14 @@
 Summary:	A set of RSBAC utilities
 Summary(pl.UTF-8):	Zbiór narzędzi RSBAC
 Name:		rsbac-admin
-Version:	1.4.0
+Version:	1.4.1
 Release:	0.3
 License:	GPL v2
 Group:		Applications
 #Source0:	ftp://rsbac.org/download/pre/rsbac-1.4.0-rc3/%{name}-%{version}%{rcver}.tar.bz2
-Source0:	ftp://rsbac.org/download/code/1.4.0/%{name}-%{version}.tar.bz2
-# Source0-md5:	b72df9263fa67e90e155c3c9d3948c05
+Source0:	ftp://rsbac.org/download/code/1.4.1/%{name}-%{version}.tar.bz2
+# Source0-md5:	7a385992d7473239fe98e6c89c6c9b28
 Patch0:		%{name}-make.patch
-Patch1:		%{name}-read-config.patch
-Patch2:		%{name}-fixes.patch
 URL:		http://www.rsbac.org/
 BuildRequires:	gettext-devel
 BuildRequires:	libtool
@@ -77,8 +75,6 @@ Pliki nagłówkowe biblioteki ....
 %prep
 %setup -q -n %{name}-%{version}%{rcver}
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
 %{__make} libs pam nss rklogd tools \
