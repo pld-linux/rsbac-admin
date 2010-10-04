@@ -5,7 +5,7 @@ diff -ur rsbac-admin-1.4.0./main/libs/Makefile rsbac-admin-1.4.0/main/libs/Makef
  
  NLS		:= 1
  
--CFLAGS		:= -fPIC -O2 -fomit-frame-pointer
+-CFLAGS		:= -fPIC -O2 -fomit-frame-pointer -Wall
 -CFLAGS		+= -I../headers -I/usr/include -I/usr/local/include  \
 +OPT		:= -fPIC -O2 -fomit-frame-pointer
 +CFLAGS		+= $(OPT) -I../headers -I/usr/include -I/usr/local/include  \
@@ -19,7 +19,7 @@ diff -ur rsbac-admin-1.4.0./main/nss/Makefile rsbac-admin-1.4.0/main/nss/Makefil
  LIBDIR		:= $(DIR_NSS)
  endif
  
--CFLAGS		:= -O2 -fomit-frame-pointer
+-CFLAGS		:= -O2 -fomit-frame-pointer -Wall
 -CFLAGS		+= -I../headers -I/usr/include -I/usr/local/include \
 +OPT		:= -O2 -fomit-frame-pointer
 +CFLAGS		+= $(OPT) -I../headers -I/usr/include -I/usr/local/include \
@@ -33,7 +33,7 @@ diff -ur rsbac-admin-1.4.0./main/pam/Makefile rsbac-admin-1.4.0/main/pam/Makefil
  NLS		:= 1
  RSBAC_PROMPT	:= 0
  
--CFLAGS		:= -fPIC -O2 -fomit-frame-pointer
+-CFLAGS		:= -fPIC -O2 -fomit-frame-pointer -Wall
 -CFLAGS		+= -shared -I../headers -I/usr/include -I/usr/local/include \
 +OPT		:= -fPIC -O2 -fomit-frame-pointer
 +CFLAGS		+= $(OPT) -shared -I../headers -I/usr/include -I/usr/local/include \
@@ -88,7 +88,7 @@ diff -ur rsbac-admin-1.4.0./main/tools/Makefile rsbac-admin-1.4.0/main/tools/Mak
  
  NLS		:= 1
  
--CFLAGS		:= -fPIC -O2 -fomit-frame-pointer
+-CFLAGS		:= -fPIC -O2 -fomit-frame-pointer -Wall
 -CFLAGS		+= -Isrc -I../headers -I/usr/include -I/usr/local/include \
 +OPT		:= -fPIC -O2 -fomit-frame-pointer
 +CFLAGS		+= $(OPT) -Isrc -I../headers -I/usr/include -I/usr/local/include \
