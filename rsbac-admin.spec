@@ -17,7 +17,7 @@ Source0:	ftp://rsbac.org/download/code/1.4.5/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-make.patch
 Patch1:		pam.patch
 URL:		http://www.rsbac.org/
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	libtool
 BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
